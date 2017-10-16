@@ -1,0 +1,18 @@
+charts:
+    test-chart:
+        programText: data("taskcluster-notify.process.server.cpu.5m.p50").publish()
+
+dashboards:
+    test-dash:
+        description: "just testing"
+        groupId: {$id: 'test-dg', kind: 'dashboardgroup'}
+        charts:
+          - chartId: {$id: 'test-chart', kind: 'chart'}
+            row: 0
+            column: 0
+            height: 1
+            width: 6
+
+dashboardgroups:
+    test-dg:
+        description: "some cool dashboards I found on the Internet"
