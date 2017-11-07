@@ -1,3 +1,6 @@
-chart: {test-chart: DMR6XlyAYAA}
-dashboard: {test-dash: DMR9QtWAYAA}
-dashboardgroup: {test-dg: DMR9czRAcAA}
+chart: {gecko-build-sli: DN_r7x7AcAA, gecko-misc: DN-s0EZAYAA, gecko-other: DN_oWJ9AcAA,
+  gecko-other-sli: DN_r1IfAgAA, gecko-other-slo: DN_oRG9AcAA, gecko-pending-build-sli: DN_udSSAcAA,
+  gecko-pending-other-sli: DN_ugqGAgAA, gecko-pending-slo: DN_ug8LAcAA, gecko-pending-test-sli: DN_ufmFAYAA,
+  gecko-slo: DN_r-35AYAA, gecko-test-sli: DN_t3M0AcAA, test-chart: DMR6XlyAYAA}
+dashboard: {gecko-pending: DN_ujs9AYAA, test-dash: DMR9QtWAYAA}
+dashboardgroup: {service-levels: DN_ujnwAYAA, test-dg: DMR9czRAcAA}
