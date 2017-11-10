@@ -16,40 +16,10 @@ charts:
                 -   label: "Minutes"
                     highWatermark: 20
         programText: |
-            po1 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-decision.pending.5m.p95")/60000
-            po1.publish("gecko-1-decision")
-            po2 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-images.pending.5m.p95")/60000
-            po2.publish("gecko-1-images")
-            po3 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-decision.pending.5m.p95")/60000
-            po3.publish("gecko-2-decision")
-            po4 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-images.pending.5m.p95")/60000
-            po4.publish("gecko-2-images")
-            po5 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-decision.pending.5m.p95")/60000
-            po5.publish("gecko-3-decision")
-            po6 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-images.pending.5m.p95")/60000
-            po6.publish("gecko-3-images")
-            po7 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-decision.pending.5m.p95")/60000
-            po7.publish("gecko-decision")
-            po8 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-misc.pending.5m.p95")/60000
-            po8.publish("gecko-misc")
-            po9 = data("tc-stats-collector.tasks.aws-provisioner-v1.taskcluster-images.pending.5m.p95")/60000
-            po9.publish("taskcluster-images")
-            po10 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-symbol-upload.pending.5m.p95")/60000
-            po10.publish("gecko-symbol-upload")
+            pending = graphite("tc-stats-collector.tasks.aws-provisioner-v1.{gecko-1-decision,gecko-1-images,gecko-2-decision,gecko-2-images,gecko-3-decision,gecko-3-images,gecko-decision,gecko-misc,taskcluster-images,gecko-symbol-upload}.pending.5m.p95", provisionerId=2, workerType=3)/60000
+            pending.publish("pending")
 
-            # service level indicator is the maxium 95th percentile (over 5
-            # minutes) pending time of any of the workers above. We calculate a
-            # maximum using conditional expressions since max(..) only works
-            # over a single metric.
-            mo2 = po1 if po1 > po2 else po2
-            mo3 = mo2 if mo2 > po3 else po3
-            mo4 = mo3 if mo3 > po4 else po4
-            mo5 = mo4 if mo4 > po5 else po5
-            mo6 = mo5 if mo5 > po6 else po6
-            mo7 = mo6 if mo6 > po7 else po7
-            mo8 = mo7 if mo7 > po8 else po8
-            mo9 = mo8 if mo8 > po9 else po9
-            sli = mo9 if mo9 > po10 else po10
+            sli = pending.max()
             sli.publish("sli")
 
     gecko-pending-build-sli:
@@ -68,52 +38,10 @@ charts:
                 -   label: "Minutes"
                     highWatermark: 30
         programText: |
-            pb1 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-android.pending.5m.p95")/60000
-            pb1.publish("gecko-1-b-android")
-            pb2 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-linux.pending.5m.p95")/60000
-            pb2.publish("gecko-1-b-linux")
-            pb3 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-macosx64.pending.5m.p95")/60000
-            pb3.publish("gecko-1-b-macosx64")
-            pb4 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-win2012.pending.5m.p95")/60000
-            pb4.publish("gecko-1-b-win2012")
-            pb5 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-win2012-beta.pending.5m.p95")/60000
-            pb5.publish("gecko-1-b-win2012-beta")
-            pb6 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-win2016.pending.5m.p95")/60000
-            pb6.publish("gecko-1-b-win2016")
-            pb7 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-android.pending.5m.p95")/60000
-            pb7.publish("gecko-2-b-android")
-            pb8 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-linux.pending.5m.p95")/60000
-            pb8.publish("gecko-2-b-linux")
-            pb9 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-macosx64.pending.5m.p95")/60000
-            pb9.publish("gecko-2-b-macosx64")
-            pb10 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-win2012.pending.5m.p95")/60000
-            pb10.publish("gecko-2-b-win2012")
-            pb11 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-android.pending.5m.p95")/60000
-            pb11.publish("gecko-3-b-android")
-            pb12 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-linux.pending.5m.p95")/60000
-            pb12.publish("gecko-3-b-linux")
-            pb13 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-macosx64.pending.5m.p95")/60000
-            pb13.publish("gecko-3-b-macosx64")
-            pb14 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-win2012.pending.5m.p95")/60000
-            pb14.publish("gecko-3-b-win2012")
+            pending = graphite("tc-stats-collector.tasks.aws-provisioner-v1.{gecko-1-b-android,gecko-1-b-linux,gecko-1-b-macosx64,gecko-1-b-win2012,gecko-1-b-win2012-beta,gecko-1-b-win2016,gecko-2-b-android,gecko-2-b-linux,gecko-2-b-macosx64,gecko-2-b-win2012,gecko-3-b-android,gecko-3-b-linux,gecko-3-b-macosx64,gecko-3-b-win2012}.pending.5m.p95", provisionerId=2, workerType=3)/60000
+            pending.publish("pending")
 
-            # service level indicator is the maxium 95th percentile (over 5
-            # minutes) pending time of any of the workers above. We calculate a
-            # maximum using conditional expressions since max(..) only works
-            # over a single metric.
-            mb2 = pb1 if pb1 > pb2 else pb2
-            mb3 = mb2 if mb2 > pb3 else pb3
-            mb4 = mb3 if mb3 > pb4 else pb4
-            mb5 = mb4 if mb4 > pb5 else pb5
-            mb6 = mb5 if mb5 > pb6 else pb6
-            mb7 = mb6 if mb6 > pb7 else pb7
-            mb8 = mb7 if mb7 > pb8 else pb8
-            mb9 = mb8 if mb8 > pb9 else pb9
-            mb10 = mb9 if mb9 > pb10 else pb10
-            mb11 = mb10 if mb10 > pb11 else pb11
-            mb12 = mb11 if mb11 > pb12 else pb12
-            mb13 = mb12 if mb12 > pb13 else pb13
-            sli = mb13 if mb13 > pb14 else pb14
+            sli = pending.max()
             sli.publish("sli")
 
     gecko-pending-test-sli:
@@ -132,37 +60,10 @@ charts:
                 -   label: "Minutes"
                     highWatermark: 45
         programText: |
-            pt1 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-linux-large.pending.5m.p95")/60000
-            pt1.publish("gecko-t-linux-large")
-            pt2 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-linux-medium.pending.5m.p95")/60000
-            pt2.publish("gecko-t-linux-medium")
-            pt3 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-linux-xlarge.pending.5m.p95")/60000
-            pt3.publish("gecko-t-linux-xlarge")
-            pt4 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win10-64.pending.5m.p95")/60000
-            pt4.publish("gecko-t-win10-64")
-            pt5 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win10-64-cu.pending.5m.p95")/60000
-            pt5.publish("gecko-t-win10-64-cu")
-            pt6 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win10-64-gpu.pending.5m.p95")/60000
-            pt6.publish("gecko-t-win10-64-gpu")
-            pt7 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win7-32.pending.5m.p95")/60000
-            pt7.publish("gecko-t-win7-32")
-            pt8 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win7-32-cu.pending.5m.p95")/60000
-            pt8.publish("gecko-t-win7-32-cu")
-            pt9 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win7-32-gpu.pending.5m.p95")/60000
-            pt9.publish("gecko-t-win7-32-gpu")
+            pending = graphite("tc-stats-collector.tasks.aws-provisioner-v1.{gecko-t-linux-large,gecko-t-linux-medium,gecko-t-linux-xlarge,gecko-t-win10-64,gecko-t-win10-64-cu,gecko-t-win10-64-gpu,gecko-t-win7-32,gecko-t-win7-32-cu,gecko-t-win7-32-gpu}.pending.5m.p95", provisionerId=2, workerType=3)/60000
+            pending.publish("pending")
 
-            # service level indicator is the maxium 95th percentile (over 5
-            # minutes) pending time of any of the workers above. We calculate a
-            # maximum using conditional expressions since max(..) only works
-            # over a single metric.
-            mt2 = pt1 if pt1 > pt2 else pt2
-            mt3 = mt2 if mt2 > pt3 else pt3
-            mt4 = mt3 if mt3 > pt4 else pt4
-            mt5 = mt4 if mt4 > pt5 else pt5
-            mt6 = mt5 if mt5 > pt6 else pt6
-            mt7 = mt6 if mt6 > pt7 else pt7
-            mt8 = mt7 if mt7 > pt8 else pt8
-            sli = mt8 if mt8 > pt9 else pt9
+            sli = pending.max()
             sli.publish("sli")
 
     gecko-pending-slo:
@@ -187,74 +88,16 @@ charts:
                 -   label: "Minutes"
                 -   label: "Met (boolean)"
         programText: |
-            # recalculate SLI's as above
-            po1 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-decision.pending.5m.p95")/60000
-            po2 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-images.pending.5m.p95")/60000
-            po3 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-decision.pending.5m.p95")/60000
-            po4 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-images.pending.5m.p95")/60000
-            po5 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-decision.pending.5m.p95")/60000
-            po6 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-images.pending.5m.p95")/60000
-            po7 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-decision.pending.5m.p95")/60000
-            po8 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-misc.pending.5m.p95")/60000
-            po9 = data("tc-stats-collector.tasks.aws-provisioner-v1.taskcluster-images.pending.5m.p95")/60000
-            po10 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-symbol-upload.pending.5m.p95")/60000
-            mo2 = po1 if po1 > po2 else po2
-            mo3 = mo2 if mo2 > po3 else po3
-            mo4 = mo3 if mo3 > po4 else po4
-            mo5 = mo4 if mo4 > po5 else po5
-            mo6 = mo5 if mo5 > po6 else po6
-            mo7 = mo6 if mo6 > po7 else po7
-            mo8 = mo7 if mo7 > po8 else po8
-            mo9 = mo8 if mo8 > po9 else po9
-            gecko_other_sli = mo9 if mo9 > po10 else po10
+            gecko_other_pending = graphite("tc-stats-collector.tasks.aws-provisioner-v1.{gecko-1-decision,gecko-1-images,gecko-2-decision,gecko-2-images,gecko-3-decision,gecko-3-images,gecko-decision,gecko-misc,taskcluster-images,gecko-symbol-upload}.pending.5m.p95", provisionerId=2, workerType=3)/60000
+            gecko_other_sli = gecko_other_pending.max()
             gecko_other_sli.publish("gecko-pending-other-sli")
 
-            pb1 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-android.pending.5m.p95")/60000
-            pb2 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-linux.pending.5m.p95")/60000
-            pb3 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-macosx64.pending.5m.p95")/60000
-            pb4 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-win2012.pending.5m.p95")/60000
-            pb5 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-win2012-beta.pending.5m.p95")/60000
-            pb6 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-1-b-win2016.pending.5m.p95")/60000
-            pb7 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-android.pending.5m.p95")/60000
-            pb8 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-linux.pending.5m.p95")/60000
-            pb9 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-macosx64.pending.5m.p95")/60000
-            pb10 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-2-b-win2012.pending.5m.p95")/60000
-            pb11 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-android.pending.5m.p95")/60000
-            pb12 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-linux.pending.5m.p95")/60000
-            pb13 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-macosx64.pending.5m.p95")/60000
-            pb14 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-3-b-win2012.pending.5m.p95")/60000
-            mb2 = pb1 if pb1 > pb2 else pb2
-            mb3 = mb2 if mb2 > pb3 else pb3
-            mb4 = mb3 if mb3 > pb4 else pb4
-            mb5 = mb4 if mb4 > pb5 else pb5
-            mb6 = mb5 if mb5 > pb6 else pb6
-            mb7 = mb6 if mb6 > pb7 else pb7
-            mb8 = mb7 if mb7 > pb8 else pb8
-            mb9 = mb8 if mb8 > pb9 else pb9
-            mb10 = mb9 if mb9 > pb10 else pb10
-            mb11 = mb10 if mb10 > pb11 else pb11
-            mb12 = mb11 if mb11 > pb12 else pb12
-            mb13 = mb12 if mb12 > pb13 else pb13
-            gecko_build_sli = mb13 if mb13 > pb14 else pb14
+            gecko_build_pending = graphite("tc-stats-collector.tasks.aws-provisioner-v1.{gecko-1-b-android,gecko-1-b-linux,gecko-1-b-macosx64,gecko-1-b-win2012,gecko-1-b-win2012-beta,gecko-1-b-win2016,gecko-2-b-android,gecko-2-b-linux,gecko-2-b-macosx64,gecko-2-b-win2012,gecko-3-b-android,gecko-3-b-linux,gecko-3-b-macosx64,gecko-3-b-win2012}.pending.5m.p95", provisionerId=2, workerType=3)/60000
+            gecko_build_sli = gecko_build_pending.max()
             gecko_build_sli.publish("gecko-pending-build-sli")
 
-            pt1 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-linux-large.pending.5m.p95")/60000
-            pt2 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-linux-medium.pending.5m.p95")/60000
-            pt3 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-linux-xlarge.pending.5m.p95")/60000
-            pt4 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win10-64.pending.5m.p95")/60000
-            pt5 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win10-64-cu.pending.5m.p95")/60000
-            pt6 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win10-64-gpu.pending.5m.p95")/60000
-            pt7 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win7-32.pending.5m.p95")/60000
-            pt8 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win7-32-cu.pending.5m.p95")/60000
-            pt9 = data("tc-stats-collector.tasks.aws-provisioner-v1.gecko-t-win7-32-gpu.pending.5m.p95")/60000
-            mt2 = pt1 if pt1 > pt2 else pt2
-            mt3 = mt2 if mt2 > pt3 else pt3
-            mt4 = mt3 if mt3 > pt4 else pt4
-            mt5 = mt4 if mt4 > pt5 else pt5
-            mt6 = mt5 if mt5 > pt6 else pt6
-            mt7 = mt6 if mt6 > pt7 else pt7
-            mt8 = mt7 if mt7 > pt8 else pt8
-            gecko_test_sli = mt8 if mt8 > pt9 else pt9
+            gecko_test_pending = graphite("tc-stats-collector.tasks.aws-provisioner-v1.{gecko-t-linux-large,gecko-t-linux-medium,gecko-t-linux-xlarge,gecko-t-win10-64,gecko-t-win10-64-cu,gecko-t-win10-64-gpu,gecko-t-win7-32,gecko-t-win7-32-cu,gecko-t-win7-32-gpu}.pending.5m.p95", provisionerId=2, workerType=3)/60000
+            gecko_test_sli = gecko_test_pending.max()
             gecko_test_sli.publish("gecko-pending-test-sli")
 
             # The service level objective for gecko workers is that gecko_other_sli should be less than 20 minutes,
